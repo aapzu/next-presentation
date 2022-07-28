@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, MouseEvent } from "react";
 import styled from "styled-components";
 import { Note as NoteType } from "../types";
 import { DateTime } from "luxon";
@@ -31,11 +31,17 @@ const Note: FC<{
   note: NoteType;
   deleteNote?: (id: string) => Promise<void>;
 }> = ({ note: { date, text, id }, deleteNote }) => {
+  const onDeleteClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (id && deleteNote) {
+      deleteNote(id);
+    }
+  };
   return (
     <NoteRow key={date} href={`/notes/${id}`}>
       <NoteText>{text}</NoteText>
       <NoteDate>{formatDate(date)}</NoteDate>
-      {id && deleteNote && <button onClick={() => deleteNote(id)}>X</button>}
+      {id && deleteNote && <button onClick={onDeleteClick}>X</button>}
     </NoteRow>
   );
 };
